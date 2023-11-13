@@ -18,6 +18,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.SemanticKernel;
 using Microsoft.SemanticKernel.Connectors.AI.OpenAI.TextEmbedding;
 using Microsoft.SemanticKernel.Planners;
+using Microsoft.SemanticKernel.Plugins.Core;
 using Model;
 using Newtonsoft.Json;
 using Plugins;
@@ -78,6 +79,8 @@ namespace Microsoft.BotBuilderSamples
                     .WithLoggerFactory(loggerFactory)
                     .Build();
 
+            kernel.ImportFunctions(new TimePlugin(), "TimePlugin");
+            kernel.ImportFunctions(new HttpPlugin(), "HttpPlugin");
             if (!_config.GetValue<string>("DOCINTEL_API_ENDPOINT").IsNullOrEmpty()) kernel.ImportFunctions(new UploadPlugin(_config, conversationData, turnContext), "UploadPlugin");
             if (!_config.GetValue<string>("SQL_CONNECTION_STRING").IsNullOrEmpty()) kernel.ImportFunctions(new SQLPlugin(_config, conversationData, turnContext), "SQLPlugin");
             if (!_config.GetValue<string>("SEARCH_API_ENDPOINT").IsNullOrEmpty()) kernel.ImportFunctions(new SearchPlugin(_config, conversationData, turnContext), "SearchPlugin");
@@ -92,7 +95,7 @@ namespace Microsoft.BotBuilderSamples
         public override async Task<string> ProcessMessage(ConversationData conversationData, ITurnContext<IMessageActivity> turnContext)
         {
             // Handle file uploads
-            if (turnContext.Activity.Attachments?.Count > 0)
+            if (turnContext.Activity.Attachments?.Any(x => x.ContentUrl != null) == true)
             {
                 if (!_config.GetValue<string>("DOCINTEL_API_ENDPOINT").IsNullOrEmpty())
                     return await HandleFileUpload(conversationData, turnContext);
