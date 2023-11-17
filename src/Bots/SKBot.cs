@@ -155,7 +155,7 @@ namespace Microsoft.BotBuilderSamples
             }
             conversationData.Attachments.Add(attachment);
 
-            return $"File {turnContext.Activity.Attachments[0].Name} uploaded successfully! {result.Pages.Count()} pages ingested.";
+            return $"File {turnContext.Activity.Attachments[0].Name} のアップロードに成功しました！ {result.Pages.Count()} ページの文書が取り込まれました。";
         }
     }
 }

@@ -45,6 +45,26 @@ public class BingSearchPlugin
             return $"Error: {response.StatusCode}";
         }
     }
+
+    [SKFunction, Description("Bingでインターネット上のニュースを検索します。")]
+    public async Task<string> BingNewsSearch([Description("検索に使用するクエリ")] string query)
+    {
+        string url = $"https://api.bing.microsoft.com/v7.0/news/search?q={Uri.EscapeDataString(query)}";
+
+        var response = await _client.GetAsync(url);
+        if (response.IsSuccessStatusCode)
+        {
+            var content = await response.Content.ReadAsStringAsync();
+            // JSONを解析して必要な情報を取り出す
+            var searchResult = JsonConvert.DeserializeObject<BingSearchResult>(content);
+            // 必要な情報を文字列に変換して返す
+            return string.Join(", ", searchResult.WebPages.Value.Select(page => page.Name));
+        }
+        else
+        {
+            return $"Error: {response.StatusCode}";
+        }
+    }
 }
 
 public class BingSearchResult

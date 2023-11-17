@@ -51,7 +51,7 @@ az deployment group create --resource-group=YOUR_RG_NAME -f main.bicep --paramet
 ```
 この手順でエラーが発生した場合は、Azure CLI を更新してみてください。
 
-6. Azure Cognitive Services インスタンスの Connect Hotels サンプル インデックス
+6. Azure Cognitive Services インスタンスの Connect Hotels サンプル インデックスの展開。Cognitive Skillの追加などは行わず、デフォルト設定で完了させます。
 ![Cognitive Search ホーム](./readme_assets/cognitive-search-home.png)
 ![サンプルから Cognitive Search インデックスを作成する](./readme_assets/cognitive-search-index-sample.png)
 7. ボット アプリケーションを App Services にデプロイします:
@@ -64,7 +64,7 @@ az webapp deployment source config-zip --resource-group "YOUR_RG_NAME" --name "Y
 
 8. Web チャットでテストする - Azure portal で Azure Bot リソースに移動し、左側のメニューで Web チャット機能を探します。
 
-![Webチャットのテスト](./readme_assets/webchat-test.png)
+![Webチャットのテスト](./readme_assets/webchat-test.ja.png)
 
 
 ## ローカルで実行する (最初にリソースを Azure にデプロイする必要があります)
@@ -76,6 +76,7 @@ az webapp deployment source config-zip --resource-group "YOUR_RG_NAME" --name "Y
 ```
     dotnet run
 ```
+-  (オプション)Visual Studio Code でデバッグを行う場合には、SKBot.csを選択して `c#: SKBot` でデバッグを実行します。
 - Bot Framework Emulator を開き、http://localhost:3987/api/messages に接続します
 - ファイアウォールが制限されている可能性のあるサービスへのアクセスを有効にすることを忘れないでください。既定では、SQL Server はパブリック接続が無効になっています。
 
@@ -85,28 +86,40 @@ az webapp deployment source config-zip --resource-group "YOUR_RG_NAME" --name "Y
 
 各機能をテストするために、次のトピックについて質問できます
 
-1.一般的な知識の質問
+1. 利用可能な関数を確認する
+    - 実装されている関数について尋ねる。
+![利用可能な関数](./readme_assets/webchat-functions.ja.png)
+
+2. 一般的な知識の質問
     - 公開されている知識について尋ねる。
-![一般的な質問のシナリオ](./readme_assets/webchat-general.png)
+![一般的な質問のシナリオ](./readme_assets/webchat-general.ja.png)
 
 1. 検索拡張生成(SearchPlugin)
     - 説明に一致するホテルを探すように依頼します。
-![検索拡張シナリオ](./readme_assets/webchat-search.png)
+![検索拡張シナリオ](./readme_assets/webchat-search.ja.png)
 
 1. 構造化データ取得 (SQLPlugin)
     - 顧客と売上について尋ねる。
-![SQL接続シナリオ](./readme_assets/webchat-sql.png)
+![SQL接続シナリオ](./readme_assets/webchat-sql.ja.png)
 
 1. ドキュメントをコンテキストとしてアップロードする (UploadPlugin)
     - ファイルをアップロードし、それについて質問します。
-![アップロードシナリオ](./readme_assets/webchat-upload.png)
+![アップロードシナリオ](./readme_assets/webchat-upload.ja.png)
 
+1. Bing 検索を使用してインターネット上の情報を検索する (BingSearchPlugin)
+    - インターネットで検索したい内容について質問します。
+![Bing検索シナリオ](./readme_assets/webchat-bing.ja.png)
+
+1. Semantic Kernel の Core Plugin ([TimePlugin](https://github.com/microsoft/semantic-kernel/blob/main/dotnet/src/Plugins/Plugins.Core/TimePlugin.cs), [HttpPlugin](https://github.com/microsoft/semantic-kernel/blob/main/dotnet/src/Plugins/Plugins.Core/HttpPlugin.cs))
+    - 時間に関するタスク、HTTPのGETやPOSTなどに関するタスクの実行
+
+**Note:** HTTPPlugin でWebサイトの情報取得すると大量のデータダウンロードされる恐れがあるので、対象サイトについては十分に注意してご利用ください
 
 ## 中間思考のデバッグ
 
 このプロジェクトには、Semantic Kernel プランナーの中間ステップ(思考、アクション、観察など)を出力できるデバッグツールが組み込まれています。この機能は、DEBUG 環境変数を "true" に切り替えることで有効にできます。
 
-![中間思考のデバッグ](./readme_assets/webchat-debug.png)
+![中間思考のデバッグ](./readme_assets/webchat-debug.ja.png)
 
 ## 独自のプラグインを開発する
 
