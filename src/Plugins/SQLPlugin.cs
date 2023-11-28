@@ -47,7 +47,7 @@ public class SQLPlugin
         [Description("SQL Server で実行するクエリ。テーブルを参照するときは、必ずスキーマ名を追加してください。")] string query
     )
     {
-        await _turnContext.SendActivityAsync($"実行中のクエリ \"{query}\"...");
+        await _turnContext.SendActivityAsync($"実行中のクエリ...");
         return QueryAsCSV(query);
     }
 

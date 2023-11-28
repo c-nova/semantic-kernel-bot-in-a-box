@@ -8,6 +8,8 @@ using System.Collections.Generic;
 using Microsoft.BotBuilderSamples;
 using Microsoft.Bot.Builder;
 using Microsoft.Bot.Schema;
+using System;
+using System.Text.Json;
 
 namespace Plugins;
 
@@ -27,17 +29,18 @@ public class UploadPlugin
     }
 
 
-
-    [SKFunction, Description("アップロードされたドキュメントで関連情報を検索する")]
+    [SKFunction, Description("アップロードされたドキュメントで関連情報を検索します。これは、ユーザーがアップロードしたドキュメントを参照する場合にのみ使用します。")]
     public async Task<string> SearchUploads(
+        [Description("検索するドキュメントの正確な名前")] string docName,
         [Description("類似性で検索するテキスト")] string query
     )
     {
-        await _turnContext.SendActivityAsync($"アップロードされたドキュメントの検索 \"{query}\"...");
+        await _turnContext.SendActivityAsync($"\"{query}\" で {docName} 内の類似性を検索中 ...");
         var embedding = await embeddingClient.GenerateEmbeddingsAsync(new List<string> { query });
         var vector = embedding.First().ToArray();
         var similarities = new List<float>();
-        foreach (AttachmentPage page in _conversationData.Attachments.First().Pages)
+        var attachment = _conversationData.Attachments.Find(x => x.Name == docName);
+        foreach (AttachmentPage page in attachment.Pages)
         {
             float similarity = 0;
             for (int i = 0; i < page.Vector.Count(); i++)
