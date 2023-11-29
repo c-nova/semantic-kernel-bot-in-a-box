@@ -8,6 +8,7 @@ param tags object
 param deploySQL bool = true
 param deploySearch bool = true
 param deployDocIntel bool = true
+param deployBing bool = true
 
 var uniqueSuffix = substring(uniqueString(subscription().id, resourceGroup().id), 1, 3) 
 var appServiceName = '${prefix}-app-${uniqueSuffix}'
@@ -47,7 +48,7 @@ module m_search 'modules/searchService.bicep' = if (deploySearch) {
   }
 }
 
-module m_bing 'modules/bing.bicep' = if (deploySearch) {
+module m_bing 'modules/bing.bicep' = if (deployBing) {
   name: 'deploy_bing'
   params: {
     resourceLocation: resourceLocation

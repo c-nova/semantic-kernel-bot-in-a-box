@@ -13,6 +13,7 @@ param tags = {
 param deployDocIntel = true
 param deploySearch = true
 param deploySQL = true
+param deployBing = true
 
 param msaAppId = 'YOUR_APP_ID'
 param msaAppPassword = 'YOUR_APP_SECRET'
