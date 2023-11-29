@@ -9,6 +9,7 @@ param openaiAccountName string
 param documentIntelligenceAccountName string
 param searchAccountName string
 param cosmosAccountName string
+param bingAccountName string
 param sqlServerName string
 param sqlDBName string
 
@@ -42,6 +43,10 @@ resource cosmosAccount 'Microsoft.DocumentDB/databaseAccounts@2022-05-15' existi
   name: cosmosAccountName
 }
 
+resource bingAccount 'Microsoft.CognitiveServices/accounts@2021-10-01' existing = {
+  name: bingAccountName
+}
+
 resource sqlServer 'Microsoft.Sql/servers@2022-05-01-preview' existing = if (deploySQL) {
   name: sqlServerName
   resource sqlDB 'databases' existing = {
@@ -72,6 +77,14 @@ resource appService 'Microsoft.Web/sites@2022-09-01' = {
       http20Enabled: true
       appSettings: [
         {
+          name: 'DEBUG'
+          value: 'false'
+        }
+        {
+          name: 'CONVERSATION_HISTORY_MAX_MESSAGES'
+          value: '10'
+        }
+        {
           name: 'MicrosoftAppType'
           value: 'MultiTenant'
         }
@@ -93,6 +106,14 @@ resource appService 'Microsoft.Web/sites@2022-09-01' = {
         }
         {
           name: 'AOAI_API_KEY'
+          value: openaiAccount.listKeys().key1
+        }
+        {
+          name: 'DALLE_AOAI_API_ENDPOINT'
+          value: openaiAccount.properties.endpoint
+        }
+        {
+          name: 'DALLE_AOAI_API_KEY'
           value: openaiAccount.listKeys().key1
         }
         {
@@ -126,6 +147,10 @@ resource appService 'Microsoft.Web/sites@2022-09-01' = {
         {
           name: 'COSMOS_API_KEY'
           value: cosmosAccount.listKeys().primaryMasterKey
+        }
+        {
+          name: 'BING_SEARCH_API_KEY'
+          value: bingAccount.listKeys().key1
         }
       ]
     }

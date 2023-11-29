@@ -18,21 +18,21 @@ public class DALLEPlugin
 
     public DALLEPlugin(IConfiguration config, ConversationData conversationData, ITurnContext<IMessageActivity> turnContext)
     {
-        var _aoaiApiKey = config.GetValue<string>("AOAI_API_KEY");
-        var _aoaiApiEndpoint = config.GetValue<string>("AOAI_API_ENDPOINT");
+        var _aoaiApiKey = config.GetValue<string>("DALLE_AOAI_API_KEY");
+        var _aoaiApiEndpoint = config.GetValue<string>("DALLE_AOAI_API_ENDPOINT");
         client = new(new Uri(_aoaiApiEndpoint), new AzureKeyCredential(_aoaiApiKey));
         _turnContext = turnContext;
     }
 
 
 
-    [SKFunction, Description("Generate images from descriptions.")]
+    [SKFunction, Description("説明から画像を生成します。")]
     public async Task<string> GenerateImages(
-        [Description("The description of the images to be generated")] string prompt,
-        [Description("The number of images to generate. If not specified, I should use 1")] int n
+        [Description("生成する画像の説明。")] string prompt,
+        [Description("生成するイメージの数。指定しない場合は、1を使用する必要があります")] int n
     )
     {
-        await _turnContext.SendActivityAsync($"Generating {n} images with the description \"{prompt}\"...");
+        await _turnContext.SendActivityAsync($"次の説明による {n} 個の画像を生成しています \"{prompt}\"...");
         Response<ImageGenerations> imageGenerations = await client.GetImageGenerationsAsync(
             new ImageGenerationOptions()
             {
@@ -45,7 +45,7 @@ public class DALLEPlugin
         images.Add(
             new {
                 type="TextBlock",
-                text="Here are the generated images.",
+                text="こちらが生成された画像です。",
                 size="large"
             }
         );
@@ -64,7 +64,7 @@ public class DALLEPlugin
             Content = adaptiveCardJson,
         };
         await _turnContext.SendActivityAsync(MessageFactory.Attachment(adaptiveCardAttachment));
-        return "Images were generated successfully and already sent to user.";
+        return "画像は正常に生成され、既にユーザーに送信されています。";
     }
 
 }

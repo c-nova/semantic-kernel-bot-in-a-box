@@ -102,7 +102,9 @@ namespace Microsoft.BotBuilderSamples
         }
         protected override async Task OnMembersAddedAsync(IList<ChannelAccount> membersAdded, ITurnContext<IConversationUpdateActivity> turnContext, CancellationToken cancellationToken)
         {
-            await turnContext.SendActivityAsync("GPTBot サンプルへようこそ。開始するには、何か入力してください。");
+            string welcomeMsg = "GPTBot サンプルへようこそ。開始するには、何か入力してください。このBotで何ができるかは、どんなことができるのかを質問してください。また会話の最初からやり直したい場合には、 'クリア' または 'clear' と入力してください。";
+            welcomeMsg = welcomeMsg.Replace("。", "。" + Environment.NewLine);
+            await turnContext.SendActivityAsync(welcomeMsg);
         }
 
         public override async Task<string> ProcessMessage(ConversationData conversationData, ITurnContext<IMessageActivity> turnContext)
@@ -177,7 +179,7 @@ namespace Microsoft.BotBuilderSamples
             }
             conversationData.Attachments.Add(attachment);
 
-            return $"File {turnContext.Activity.Attachments[0].Name} のアップロードに成功しました！ {result.Pages.Count()} ページの文書が取り込まれました。";
+            return $"File {pdfAttachment.Name} のアップロードに成功しました！ {result.Pages.Count()} ページの文書が取り込まれました。";
         }
     }
 }

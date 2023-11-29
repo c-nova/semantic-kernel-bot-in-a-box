@@ -3,7 +3,7 @@
     "description": "要求、コマンド、または目標が与えられた場合、目標を達成するための多ステップの計画を作成します。各ステップの後、LLMが呼び出され、次のステップの推論が実行されます。",
     "type": "completion",
     "completion": {
-      "max_tokens": 2048,
+      "max_tokens": 8192,
       "temperature": 0,
       "top_p": 0,
       "presence_penalty": 0,

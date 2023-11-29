@@ -15,6 +15,7 @@ var openaiAccountName = '${prefix}-openai-${uniqueSuffix}'
 var documentIntelligenceAccountName = '${prefix}-docs-${uniqueSuffix}'
 var searchAccountName = '${prefix}-search-${uniqueSuffix}'
 var cosmosAccountName = '${prefix}-cosmos-${uniqueSuffix}'
+var bingAccountName = '${prefix}-bing-${uniqueSuffix}'
 var sqlServerName = '${prefix}-sql-${uniqueSuffix}'
 var sqlDBName = '${prefix}-db-${uniqueSuffix}'
 
@@ -39,6 +40,15 @@ module m_docs 'modules/documentIntelligence.bicep' = if (deployDocIntel) {
 
 module m_search 'modules/searchService.bicep' = if (deploySearch) {
   name: 'deploy_search'
+  params: {
+    resourceLocation: resourceLocation
+    prefix: prefix
+    tags: tags
+  }
+}
+
+module m_bing 'modules/bing.bicep' = if (deploySearch) {
+  name: 'deploy_bing'
   params: {
     resourceLocation: resourceLocation
     prefix: prefix
@@ -78,6 +88,7 @@ module m_app 'modules/appservice.bicep' = {
     documentIntelligenceAccountName: documentIntelligenceAccountName
     searchAccountName: searchAccountName
     cosmosAccountName: cosmosAccountName
+    bingAccountName: bingAccountName
     sqlServerName: sqlServerName
     sqlDBName: sqlDBName
     deploySQL: deploySQL
@@ -85,7 +96,7 @@ module m_app 'modules/appservice.bicep' = {
     deployDocIntel: deployDocIntel
   }
   dependsOn: [
-    m_openai, m_docs, m_cosmos, m_search, m_sql
+    m_openai, m_docs, m_cosmos, m_search, m_sql, m_bing
   ]
 }
 

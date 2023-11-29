@@ -108,17 +108,16 @@ az webapp deployment source config-zip --resource-group "YOUR_RG_NAME" --name "Y
 
 1. Bing 検索を使用してインターネット上の情報を検索する (BingSearchPlugin)
     - インターネットで検索したい内容について質問します。
-
 ![Bing検索シナリオ](./readme_assets/webchat-bing.ja.png)
 
 1. Semantic Kernel の Core Plugin ([TimePlugin](https://github.com/microsoft/semantic-kernel/blob/main/dotnet/src/Plugins/Plugins.Core/TimePlugin.cs), [HttpPlugin](https://github.com/microsoft/semantic-kernel/blob/main/dotnet/src/Plugins/Plugins.Core/HttpPlugin.cs))
     - 時間に関するタスク、HTTPのGETやPOSTなどに関するタスクの実行
 
-**Note:** HTTPPlugin でWebサイトの情報取得すると大量のデータダウンロードされる恐れがあるので、対象サイトについては十分に注意してご利用ください
+    **Note:** HTTPPlugin でWebサイトの情報取得すると大量のデータダウンロードされる恐れがあるので、対象サイトについては十分に注意してご利用ください
 
 1. 画像の生成 (DALLEPlugin)
-    - 生成したい画像を依頼します;
-![画像生成シナリオ](./readme_assets/webchat-dalle.png)
+    - 生成したい画像を依頼します（注: 現在は DALL-E 2 のみ対応）;
+![画像生成シナリオ](./readme_assets/webchat-dalle.ja.png)
 
 
 ## キーワード
